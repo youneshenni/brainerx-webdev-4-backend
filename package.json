@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/youneshenni/brainerx-webdev-4-backend#readme",
   "dependencies": {
+    "ejs": "^3.1.10",
     "express": "^4.19.2"
   }
 }
