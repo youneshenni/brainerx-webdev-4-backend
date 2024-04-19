@@ -18,5 +18,11 @@
   </tbody>
 </table>
 <form action="/" method="post">
-  <input type="text" name="text" /><input type="submit" value="Submit" />
+  <input type="text" name="name" required min="1" />
+  <input type="number" required name="age" max="200" min="18" />
+  <input type="text" required name="email" />
+  <input type="password" name="password" id="password" >
+    <input type="submit" value="Submit" />
+    <p style="color:red"><%= error %></p>
+
 </form>
