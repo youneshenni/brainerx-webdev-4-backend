@@ -1,32 +1,41 @@
 const express = require("express");
-let ejs = require("ejs");
+const { readFileSync, writeFileSync, existsSync } = require("fs");
+const usersPath = "./users.json";
 
 const app = express();
 
-const users = [
-  {
-    name: "John",
-    age: 25,
-    email: "john@example.com",
-  },
-  {
-    name: "Jane",
-    age: 30,
-    email: "jane@gmail.com",
-  },
-  {
-    name: "Doe",
-    age: 35,
-    email: "doe@example.com",
-  },
-];
+function initializeUsersFile() {
+  writeFileSync(usersPath, "[]");
+}
+
+function readUsersFromFile() {
+  if (!existsSync(usersPath)) {
+    initializeUsersFile();
+    return [];
+  }
+  const data = readFileSync(usersPath);
+  try {
+    return JSON.parse(data);
+  } catch (e) {
+    initializeUsersFile();
+    return [];
+  }
+}
+
+function writeToFile(data) {
+  writeFileSync(usersPath, JSON.stringify(data, null, 2));
+}
 
 app.use(express.urlencoded({ extended: true }));
 
 app.set("view engine", "ejs");
 
-app.get("/", (_, res) => res.render("list", { users, error: "" }));
+app.get("/", (_, res) => {
+  const users = readUsersFromFile();
+  res.render("list", { users, error: "" });
+});
 app.post("/", (req, res) => {
+  const users = readUsersFromFile();
   let error = null;
   if (!req.body.name) error = { message: "Name is required" };
   if (!req.body.age) error = { message: "Age is required" };
@@ -35,7 +44,10 @@ app.post("/", (req, res) => {
   if (req.body.age > 200) error = { message: "Age must be less than 200" };
   if (/^[a-zA-Z\.]+\@[a-zA-Z]+(\.[a-zA-Z]+)+$/.test(req.body.email) === false)
     error = { message: "Invalid email" };
-  if (!error) users.push(req.body);
+  if (!error) {
+    users.push(req.body);
+    writeToFile(users);
+  }
   res.render("list", { users, error: error?.message || "" });
 });
 
