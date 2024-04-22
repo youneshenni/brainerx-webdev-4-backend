@@ -1,14 +1,7 @@
 [
   {
-    "name": "Younes",
-    "age": "23",
-    "email": "bachiri.abdelouahab@gmail.com",
-    "password": "praticPowerAdmin"
-  },
-  {
-    "name": "HHH",
-    "age": "33",
-    "email": "younes@gmail.com",
-    "password": "7374"
+    "name": "John",
+    "age": 25,
+    "email": ""
   }
 ]
