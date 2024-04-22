@@ -1,0 +1,7 @@
+services:
+  apache-php:
+    image: php:7.4-apache
+    volumes:
+      - ./src:/var/www/html
+    ports:
+      - 8000:80
