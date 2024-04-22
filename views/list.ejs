@@ -1,18 +1,17 @@
+<%- include('partials/menu'); %>
 <h1>My shopping list:</h1>
 <table>
   <thead>
     <tr>
-      <th>Name</th>
-      <th>Age</th>
-      <th>Email</th>
+      <th>Username</th>
+      <th>Password</th>
     </tr>
   </thead>
   <tbody>
     <% for(var i=0; i<users.length; i++) { %>
       <tr>
-        <td><%= users[i].name %></td>
-        <td><%= users[i].age %></td>
-        <td><%= users[i].email %></td>
+        <td><%= users[i].username %></td>
+        <td><%= users[i].password %></td>
       </tr>
     <% } %>
   </tbody>
