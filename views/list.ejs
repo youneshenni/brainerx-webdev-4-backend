@@ -1,27 +1,6 @@
 <%- include('partials/menu'); %>
 <h1>My shopping list:</h1>
-<table>
-  <thead>
-    <tr>
-      <th>Username</th>
-      <th>Password</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% for(var i=0; i<users.length; i++) { %>
-      <tr>
-        <td><%= users[i].username %></td>
-        <td><%= users[i].password %></td>
-      </tr>
-    <% } %>
-  </tbody>
-</table>
-<form action="/" method="post">
-  <input type="text" name="name" required min="1" />
-  <input type="number" required name="age" max="200" min="18" />
-  <input type="text" required name="email" />
-  <input type="password" name="password" id="password" >
-    <input type="submit" value="Submit" />
-    <p style="color:red"><%= error %></p>
-
-</form>
+<script>
+  const data = fetch("/").then((res) => res.json());
+  console.log(data);
+</script>

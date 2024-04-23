@@ -1,15 +1,43 @@
 <%- include('partials/menu'); %>
 
-<form action="login" method="post">
+<form id="form" action="login" method="post">
   <div>
     <label>Username:</label>
-    <input type="text" name="username" />
+    <input id="username" type="text" name="username" />
   </div>
   <div>
     <label>Password:</label>
-    <input type="password" name="password" />
+    <input id="password" type="password" name="password" />
   </div>
   <div>
     <input type="submit" value="Log In" />
   </div>
 </form>
+
+<script>
+  document
+    .getElementById("form")
+    .addEventListener("submit", async function (e) {
+      e.preventDefault();
+      var form = e.target;
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const response = await fetch(form.action, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      }).then((res) => res.json());
+
+      localStorage.setItem("jwt", response.token);
+
+      fetch("/", {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem("jwt")}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => console.log(data));
+    });
+</script>

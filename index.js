@@ -24,18 +24,16 @@ sequelize.sync({ alter: true });
 
 const app = express();
 
-const getUsers = () => User.findAll();
-
-const writeUser = (user) => User.create(user);
-
 app.use(express.urlencoded({ extended: true }));
+
+app.use(express.json());
 
 app.set("view engine", "ejs");
 
 app.use(cookieParser());
 
 app.get("/", async (req, res) => {
-  const token = req.cookies.token;
+  const token = req.headers.authorization.split(" ")[1];
   if (!token) return res.redirect("/login");
   jwt.verify(token, "brainerx", async (err, decoded) => {
     if (err) return res.redirect("/login");
@@ -113,8 +111,7 @@ app.post("/login", async (req, res) => {
 
   if (passwordMatch) {
     const token = jwt.sign({ username: foundUser.username }, "brainerx");
-    res.cookie("token", token);
-    res.redirect("/");
+    res.json({ token });
   } else {
     res.send("Wrong password");
   }
