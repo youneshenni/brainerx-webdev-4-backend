@@ -1,6 +1,33 @@
 <%- include('partials/menu'); %>
 <h1>My shopping list:</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Username</th>
+      <th>Password</th>
+    </tr>
+  </thead>
+  <tbody id="tbody"></tbody>
+</table>
+<form action="/" method="post">
+  <input type="text" name="username" required min="1" />
+  <input type="password" name="password" id="password" />
+  <input type="submit" value="Submit" />
+  <p style="color: red"><%= error %></p>
+</form>
+
 <script>
-  const data = fetch("/").then((res) => res.json());
-  console.log(data);
+  fetch("/users")
+    .then((res) => res.json())
+    .then((data) => {
+      const tbody = document.getElementById("tbody");
+      data.forEach((user) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+        <td>${user.username}</td>
+        <td>${user.password}</td>
+      `;
+        tbody.appendChild(tr);
+      });
+    });
 </script>

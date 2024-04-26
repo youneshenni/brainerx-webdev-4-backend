@@ -52,13 +52,8 @@ app.get("/register", (_, res) => {
 
 app.post("/", async (req, res) => {
   let error = null;
-  if (!req.body.name) error = { message: "Name is required" };
-  if (!req.body.age) error = { message: "Age is required" };
-  if (!req.body.email) error = { message: "Email is required" };
-  if (req.body.age < 17) error = { message: "Age must be at least 18" };
-  if (req.body.age > 200) error = { message: "Age must be less than 200" };
-  if (/^[a-zA-Z\.]+\@[a-zA-Z]+(\.[a-zA-Z]+)+$/.test(req.body.email) === false)
-    error = { message: "Invalid email" };
+  if (!req.body.username) error = { message: "Name is required" };
+  if (!req.body.password) error = { message: "Password is required" };
   if (!error) {
     try {
       await writeUser(req.body);
@@ -66,6 +61,7 @@ app.post("/", async (req, res) => {
       if (e.errors[0].message === "email must be unique") {
         error = { message: "Email already exists" };
       } else {
+        console.error(error);
         error = { message: "Unknown error" };
       }
     }
@@ -115,6 +111,11 @@ app.post("/login", async (req, res) => {
   } else {
     res.send("Wrong password");
   }
+});
+
+app.get("/users", async (req, res) => {
+  const users = await User.findAll();
+  res.json(users);
 });
 
 app.listen(8000);
