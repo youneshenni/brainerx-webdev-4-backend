@@ -1,6 +1,6 @@
 <%- include('partials/menu'); %>
 
-<form action="login" method="post">
+<form action="login" method="post" id="loginForm">
   <div>
     <label>Username:</label>
     <input type="text" name="username" />
@@ -13,3 +13,31 @@
     <input type="submit" value="Log In" />
   </div>
 </form>
+
+<script>
+  document.getElementById("loginForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    // convert to JSON
+    const data = {};
+    formData.forEach((value, key) => (data[key] = value));
+    console.log(data);
+    fetch("/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (response.ok) {
+          window.location.href = "/";
+        } else {
+          alert("Invalid username or password");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  });
+</script>
