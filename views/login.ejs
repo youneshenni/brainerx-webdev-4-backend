@@ -1,6 +1,6 @@
 <%- include('partials/menu'); %>
 
-<form id="form" action="login" method="post">
+<form action="login" method="post" id="loginForm">
   <div>
     <label>Username:</label>
     <input id="username" type="text" name="username" />
@@ -15,29 +15,29 @@
 </form>
 
 <script>
-  document
-    .getElementById("form")
-    .addEventListener("submit", async function (e) {
-      e.preventDefault();
-      var form = e.target;
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
-      const response = await fetch(form.action, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      }).then((res) => res.json());
-
-      localStorage.setItem("jwt", response.token);
-
-      fetch("/", {
-        headers: {
-          authorization: `Bearer ${localStorage.getItem("jwt")}`,
-        },
+  document.getElementById("loginForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    // convert to JSON
+    const data = {};
+    formData.forEach((value, key) => (data[key] = value));
+    console.log(data);
+    fetch("/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (response.ok) {
+          window.location.href = "/";
+        } else {
+          alert("Invalid username or password");
+        }
       })
-        .then((res) => res.json())
-        .then((data) => console.log(data));
-    });
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  });
 </script>
